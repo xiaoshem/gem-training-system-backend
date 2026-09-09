@@ -1,0 +1,160 @@
+09:48:37.689 [main] INFO org.springframework.core.KotlinDetector - Kotlin reflection implementation not found at runtime, related features won't be available.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.3.RELEASE)
+
+2026-09-09 09:48:38.027  INFO 2768 --- [           main] cn.org.alan.exam.ExamApplication         : Starting ExamApplication on LAPTOP-KCM3KRNT with PID 2768 (D:\biyesheji1\online-exam-system-backend-master\target\classes started by h1334 in D:\biyesheji1\online-exam-system-backend-master)
+2026-09-09 09:48:38.027  INFO 2768 --- [           main] cn.org.alan.exam.ExamApplication         : The following profiles are active: dev
+2026-09-09 09:48:38.076  WARN 2768 --- [kground-preinit] o.s.h.c.j.Jackson2ObjectMapperBuilder    : For Jackson Kotlin classes support please add "com.fasterxml.jackson.module:jackson-module-kotlin" to the classpath
+2026-09-09 09:48:39.416  INFO 2768 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2026-09-09 09:48:39.417  INFO 2768 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2026-09-09 09:48:39.475  INFO 2768 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 49ms. Found 0 repository interfaces.
+2026-09-09 09:48:39.935  INFO 2768 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$ab4a0879] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-09-09 09:48:40.034  INFO 2768 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$43f7d0b3] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-09-09 09:48:40.045  INFO 2768 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'objectPostProcessor' of type [org.springframework.security.config.annotation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-09-09 09:48:40.051  INFO 2768 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@36224f93' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-09-09 09:48:40.054  INFO 2768 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$68cc7365] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-09-09 09:48:40.064  INFO 2768 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-09-09 09:48:48.437  INFO 2768 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2026-09-09 09:48:48.453  INFO 2768 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-09 09:48:48.453  INFO 2768 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.16]
+2026-09-09 09:48:48.459  INFO 2768 --- [           main] o.a.catalina.core.AprLifecycleListener   : The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [D:\Program Files\java\jdk-21\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Users\h1334\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell;C:\Users\h1334\.codex\tmp\arg0\codex-arg0oXPaZP;C:\Users\h1334\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\libheif\libheif\bin;C:\Users\h1334\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\jxrlib\jxrlib\bin;C:\Users\h1334\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\poppler\Library\bin;C:\Users\h1334\.cache\codex-runtimes\codex-primary-runtime\dependencies\bin\override;D:\python3.13\Scripts\;D:\python3.13\;D:\VMware workstation pro\bin\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;D:\mingw\mingw64\bin;D:\Program Files\java\jdk-21\bin;D:\Windows Kits\10\Windows Performance Toolkit\;D:\下载\新建文件夹\123pan\;D:\下载\;ode.js\;D:\下载\node.js;D:\下载\node.js\node_cache;D:\下载\node.js\node_global;D:\下载\Git\cmd;D:\newDownloadFolder\apache-maven-3.9.11\bin;;D:\WeChatMiniProgramDevtool\微信web开发者工具\dll;D:\MySQL\MySQL Shell 8.0\bin\;C:\Users\h1334\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell;C:\Users\h1334\AppData\Local\Microsoft\WindowsApps;D:\vs code install the package\Microsoft VS Code\bin;D:\下载\ideaFlagshipVersion\IntelliJ IDEA 2024.3.5\bin;C:\Users\h1334\AppData\Roaming\npm;D:\datagrip\DataGrip 2024.1.1\bin;D:\devecoStudio\DevEco Studio\bin;D:\cpolar\;D:\pycharm\PyCharm 2024.1.7\bin;C:\Users\h1334\.cache\codex-runtimes\codex-primary-runtime\dependencies\bin\fallback;C:\Users\h1334\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin;C:\Users\h1334\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\git\cmd;C:\Users\h1334\AppData\Local\OpenAI\Codex\bin\c60635126245daef;C:\Users\h1334\AppData\Local\OpenAI\Codex\bin\8e5b6932251c2c1c;.]
+2026-09-09 09:48:48.679  INFO 2768 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-09-09 09:48:48.679  INFO 2768 --- [           main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 10605 ms
+2026-09-09 09:48:52.661  INFO 2768 --- [           main] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public void cn.org.alan.exam.websocket.WebsocketHandler.setInstance()
+2026-09-09 09:48:53.441  INFO 2768 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2cd877d3, org.springframework.security.web.context.SecurityContextPersistenceFilter@59db8216, org.springframework.security.web.header.HeaderWriterFilter@48cd8e71, org.springframework.web.filter.CorsFilter@5178345d, org.springframework.security.web.authentication.logout.LogoutFilter@49ee3b8d, cn.org.alan.exam.filter.VerifyTokenFilter@fceab5d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@33bf2602, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@463a1f47, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3d605657, org.springframework.security.web.session.SessionManagementFilter@2f6d8c9, org.springframework.security.web.access.ExceptionTranslationFilter@3c2fa57a, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6ca30886]
+2026-09-09 09:48:53.456  INFO 2768 --- [           main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+2026-09-09 09:48:53.481  INFO 2768 --- [           main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2026-09-09 09:48:53.627  INFO 2768 --- [           main] io.lettuce.core.EpollProvider            : Starting without optional epoll library
+2026-09-09 09:48:53.628  INFO 2768 --- [           main] io.lettuce.core.KqueueProvider           : Starting without optional kqueue library
+2026-09-09 09:48:53.907  INFO 2768 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2026-09-09 09:48:54.384  INFO 2768 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2026-09-09 09:48:54.427  INFO 2768 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2026-09-09 09:48:54.470  INFO 2768 --- [           main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2026-09-09 09:48:54.606  INFO 2768 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: verifyCodeUsingPOST_1
+2026-09-09 09:48:54.656  INFO 2768 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: pageOwnerDiscussionUsingGET_1
+2026-09-09 09:48:54.687  INFO 2768 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getDetailUsingGET_1
+2026-09-09 09:48:55.509  INFO 2768 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2026-09-09 09:48:55.510  INFO 2768 --- [           main] cn.org.alan.exam.ExamApplication         : Started ExamApplication in 17.793 seconds (JVM running for 18.173)
+2026-09-09 09:48:56.545  INFO 2768 --- [taskScheduler-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-09-09 09:48:56.707  INFO 2768 --- [taskScheduler-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-09-09 09:49:05.308  INFO 2768 --- [0.1-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-09 09:49:05.309  INFO 2768 --- [0.1-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-09-09 09:49:05.315  INFO 2768 --- [0.1-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms
+2026-09-09 09:49:05.343  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 09:49:05.343  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/auths/captcha GET
+2026-09-09 09:49:05.343  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.AuthController.getCaptcha
+2026-09-09 09:49:05.343  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 09:49:05.371  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: [null,null]
+2026-09-09 09:49:05.970  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : 返回结果: null
+2026-09-09 09:49:05.970  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 结束 耗时：628 ms -------------
+2026-09-09 09:49:33.354  INFO 2768 --- [0.1-8080-exec-3] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 09:49:33.354  INFO 2768 --- [0.1-8080-exec-3] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/auths/captcha GET
+2026-09-09 09:49:33.354  INFO 2768 --- [0.1-8080-exec-3] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.AuthController.getCaptcha
+2026-09-09 09:49:33.354  INFO 2768 --- [0.1-8080-exec-3] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 09:49:33.354  INFO 2768 --- [0.1-8080-exec-3] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: [null,null]
+2026-09-09 09:49:33.369  INFO 2768 --- [0.1-8080-exec-3] cn.org.alan.exam.common.aop.LogAsPect    : 返回结果: null
+2026-09-09 09:49:33.369  INFO 2768 --- [0.1-8080-exec-3] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 结束 耗时：15 ms -------------
+2026-09-09 09:50:47.487  INFO 2768 --- [0.1-8080-exec-6] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 09:50:47.487  INFO 2768 --- [0.1-8080-exec-6] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/auths/captcha GET
+2026-09-09 09:50:47.487  INFO 2768 --- [0.1-8080-exec-6] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.AuthController.getCaptcha
+2026-09-09 09:50:47.487  INFO 2768 --- [0.1-8080-exec-6] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 09:50:47.487  INFO 2768 --- [0.1-8080-exec-6] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: [null,null]
+2026-09-09 09:50:47.498  INFO 2768 --- [0.1-8080-exec-6] cn.org.alan.exam.common.aop.LogAsPect    : 返回结果: null
+2026-09-09 09:50:47.498  INFO 2768 --- [0.1-8080-exec-6] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 结束 耗时：11 ms -------------
+2026-09-09 09:56:14.083  INFO 2768 --- [0.1-8080-exec-7] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 09:56:14.083  INFO 2768 --- [0.1-8080-exec-7] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/auths/verifyCode/KVKY POST
+2026-09-09 09:56:14.084  INFO 2768 --- [0.1-8080-exec-7] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.AuthController.verifyCode
+2026-09-09 09:56:14.084  INFO 2768 --- [0.1-8080-exec-7] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 09:56:14.084  INFO 2768 --- [0.1-8080-exec-7] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: [null,"KVKY"]
+2026-09-09 09:56:14.086 ERROR 2768 --- [0.1-8080-exec-7] c.o.a.e.c.h.GlobalExceptionHandler       : 接口调用异常: 验证码已过期
+2026-09-09 09:56:15.791  INFO 2768 --- [0.1-8080-exec-8] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 09:56:15.791  INFO 2768 --- [0.1-8080-exec-8] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/auths/captcha GET
+2026-09-09 09:56:15.791  INFO 2768 --- [0.1-8080-exec-8] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.AuthController.getCaptcha
+2026-09-09 09:56:15.791  INFO 2768 --- [0.1-8080-exec-8] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 09:56:15.791  INFO 2768 --- [0.1-8080-exec-8] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: [null,null]
+2026-09-09 09:56:15.803  INFO 2768 --- [0.1-8080-exec-8] cn.org.alan.exam.common.aop.LogAsPect    : 返回结果: null
+2026-09-09 09:56:15.803  INFO 2768 --- [0.1-8080-exec-8] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 结束 耗时：12 ms -------------
+2026-09-09 09:56:23.455  INFO 2768 --- [0.1-8080-exec-9] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 09:56:23.455  INFO 2768 --- [0.1-8080-exec-9] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/auths/verifyCode/QSth POST
+2026-09-09 09:56:23.455  INFO 2768 --- [0.1-8080-exec-9] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.AuthController.verifyCode
+2026-09-09 09:56:23.456  INFO 2768 --- [0.1-8080-exec-9] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 09:56:23.456  INFO 2768 --- [0.1-8080-exec-9] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: [null,"QSth"]
+2026-09-09 09:56:23.456 ERROR 2768 --- [0.1-8080-exec-9] c.o.a.e.c.h.GlobalExceptionHandler       : 接口调用异常: 验证码错误
+2026-09-09 09:56:30.027  INFO 2768 --- [.1-8080-exec-10] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 09:56:30.027  INFO 2768 --- [.1-8080-exec-10] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/auths/verifyCode/0Sth POST
+2026-09-09 09:56:30.027  INFO 2768 --- [.1-8080-exec-10] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.AuthController.verifyCode
+2026-09-09 09:56:30.027  INFO 2768 --- [.1-8080-exec-10] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 09:56:30.027  INFO 2768 --- [.1-8080-exec-10] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: [null,"0Sth"]
+2026-09-09 09:56:30.048  INFO 2768 --- [.1-8080-exec-10] cn.org.alan.exam.common.aop.LogAsPect    : 返回结果: {"code":1,"msg":"验证码校验成功"}
+2026-09-09 09:56:30.048  INFO 2768 --- [.1-8080-exec-10] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 结束 耗时：21 ms -------------
+2026-09-09 09:56:30.104  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 09:56:30.104  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/auths/login POST
+2026-09-09 09:56:30.104  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.AuthController.login
+2026-09-09 09:56:30.104  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 09:56:30.105  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: [null,{"username":"student"}]
+2026-09-09 09:56:30.209  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.utils.IPUtils           : IP: 127.0.0.1, Region: 0|0|0|内网IP|内网IP, IO Count: 3, Took: 533 μs
+2026-09-09 09:56:30.218  INFO 2768 --- [0.1-8080-exec-1] c.o.a.e.common.handler.FiledFullHandler  : create_time字段满足公共字段自动填充规则，已填充
+2026-09-09 09:56:30.241  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : 返回结果: {"code":1,"data":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySW5mbyI6IntcImlkXCI6MTY0LFwidXNlck5hbWVcIjpcInN0dWRlbnRcIixcInJlYWxOYW1lXCI6XCLlrabnlJ_mtYvor5XotKblj7dcIixcInBhc3N3b3JkXCI6bnVsbCxcImF2YXRhclwiOlwiaHR0cHM6Ly9vbmxpbmUtZXhhbS1zeXN0ZW0tYmFja2VuZC5vc3MtY24tYmVpamluZy5hbGl5dW5jcy5jb20vZGE5M2MyYTYtNjg3OS00NmMzLWIzOGYtYTk5OTU2ZjcwZDIyLmpwZ1wiLFwicm9sZUlkXCI6MSxcImdyYWRlSWRcIjoxMjQsXCJjcmVhdGVUaW1lXCI6XCIyMDI1LTAzLTIyVDExOjM4OjM2XCIsXCJzdGF0dXNcIjoxLFwiaXNEZWxldGVkXCI6MH0iLCJpc3MiOiJ3aiIsImV4cCI6MTc4ODkyMDc5MCwiYXV0aExpc3QiOlsicm9sZV9zdHVkZW50Il0sImlhdCI6MTc4ODkxODk5MH0.6Sd7ptvHH7R9O9T6pwErxelRbDfOvcMd9BEEdXGoUNk","msg":"登录成功"}
+2026-09-09 09:56:30.241  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 结束 耗时：137 ms -------------
+2026-09-09 09:56:30.300  INFO 2768 --- [0.1-8080-exec-2] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 09:56:30.300  INFO 2768 --- [0.1-8080-exec-2] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/auths/track-presence POST
+2026-09-09 09:56:30.300  INFO 2768 --- [0.1-8080-exec-2] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.AuthController.trackPresence
+2026-09-09 09:56:30.300  INFO 2768 --- [0.1-8080-exec-2] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 09:56:30.300  INFO 2768 --- [0.1-8080-exec-2] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: [null]
+2026-09-09 09:56:30.318  INFO 2768 --- [0.1-8080-exec-2] cn.org.alan.exam.common.aop.LogAsPect    : 返回结果: {"code":1,"msg":"请求成功"}
+2026-09-09 09:56:30.318  INFO 2768 --- [0.1-8080-exec-2] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 结束 耗时：18 ms -------------
+2026-09-09 09:56:30.346  INFO 2768 --- [0.1-8080-exec-3] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 09:56:30.346  INFO 2768 --- [0.1-8080-exec-3] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/stat/daily GET
+2026-09-09 09:56:30.346  INFO 2768 --- [0.1-8080-exec-4] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 09:56:30.346  INFO 2768 --- [0.1-8080-exec-3] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.StatController.getDaily
+2026-09-09 09:56:30.346  INFO 2768 --- [0.1-8080-exec-4] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/notices/new GET
+2026-09-09 09:56:30.346  INFO 2768 --- [0.1-8080-exec-3] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 09:56:30.346  INFO 2768 --- [0.1-8080-exec-4] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.NoticeController.getNewNotice
+2026-09-09 09:56:30.346  INFO 2768 --- [0.1-8080-exec-3] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: []
+2026-09-09 09:56:30.346  INFO 2768 --- [0.1-8080-exec-4] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 09:56:30.347  INFO 2768 --- [0.1-8080-exec-4] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: [1,10]
+2026-09-09 09:56:30.366  INFO 2768 --- [0.1-8080-exec-3] cn.org.alan.exam.common.aop.LogAsPect    : 返回结果: {"code":1,"data":[{"id":130,"loginDate":"2026-09-09","totalSeconds":0,"userId":164},{"id":129,"loginDate":"2025-04-26","totalSeconds":63127,"userId":164},{"id":128,"loginDate":"2025-04-25","totalSeconds":28830,"userId":164},{"id":127,"loginDate":"2025-04-24","totalSeconds":564020,"userId":164},{"id":126,"loginDate":"2025-03-22","totalSeconds":0,"userId":164}],"msg":"请求成功"}
+2026-09-09 09:56:30.366  INFO 2768 --- [0.1-8080-exec-3] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 结束 耗时：20 ms -------------
+2026-09-09 09:56:30.486  INFO 2768 --- [0.1-8080-exec-4] cn.org.alan.exam.common.aop.LogAsPect    : 返回结果: {"code":1,"data":{"current":1,"pages":1,"records":[{"content":"<p>3</p>","createTime":"2026-09-01T14:33:37","id":115,"isPublic":1,"realName":"管理员","title":"1","userId":1}],"size":10,"total":1},"msg":"查询成功"}
+2026-09-09 09:56:30.486  INFO 2768 --- [0.1-8080-exec-4] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 结束 耗时：140 ms -------------
+2026-09-09 09:56:48.548  INFO 2768 --- [0.1-8080-exec-9] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 09:56:48.548  INFO 2768 --- [0.1-8080-exec-9] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/discussion/query/page/student GET
+2026-09-09 09:56:48.548  INFO 2768 --- [0.1-8080-exec-9] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.DiscussionController.pageDiscussionByGrade
+2026-09-09 09:56:48.548  INFO 2768 --- [0.1-8080-exec-9] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 09:56:48.549  INFO 2768 --- [0.1-8080-exec-9] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: [null,1,10]
+2026-09-09 09:56:48.580  INFO 2768 --- [0.1-8080-exec-9] cn.org.alan.exam.common.aop.LogAsPect    : 返回结果: {"code":1,"data":{"current":1,"pages":1,"records":[{"createTime":"2025-04-04T17:55:10","id":1,"sender":"教师测试账号","title":"测试发布讨论 -标题1"}],"size":10,"total":1},"msg":"查询成功"}
+2026-09-09 09:56:48.580  INFO 2768 --- [0.1-8080-exec-9] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 结束 耗时：32 ms -------------
+2026-09-09 09:56:53.391  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 09:56:53.391  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/records/exam/paging GET
+2026-09-09 09:56:53.391  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.RecordController.getExamRecordPage
+2026-09-09 09:56:53.391  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 09:56:53.391  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: [1,10,null,false]
+2026-09-09 09:56:53.431  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : 返回结果: {"code":1,"data":{"current":1,"pages":1,"records":[{"createTime":"2025-04-26T14:34:59","endTime":"2025-05-27T16:00:00","examDuration":100,"grossScore":20,"id":120,"judgeCount":10,"judgeScore":2,"limitTime":"2025-04-26T14:35:36","maxCount":100,"multiCount":0,"multiScore":0,"passedScore":1,"radioCount":0,"radioScore":0,"saqCount":0,"saqScore":0,"startTime":"2025-04-09T16:00:00","title":"test1","userId":163,"userScore":10,"userTime":19},{"createTime":"2025-04-26T14:07:42","endTime":"2025-05-14T16:00:00","examDuration":1,"grossScore":21,"id":119,"judgeCount":3,"judgeScore":7,"limitTime":"2026-09-01T13:35:37","maxCount":1,"multiCount":0,"multiScore":0,"passedScore":1,"radioCount":0,"radioScore":0,"saqCount":0,"saqScore":0,"startTime":"2025-04-20T16:00:00","title":"test3","userId":163,"userScore":0,"userTime":42593246}],"size":10,"total":2},"msg":"分页查询已考试试卷成功"}
+2026-09-09 09:56:53.431  INFO 2768 --- [0.1-8080-exec-1] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 结束 耗时：40 ms -------------
+2026-09-09 10:01:30.910  INFO 2768 --- [0.1-8080-exec-4] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 10:01:30.910  INFO 2768 --- [0.1-8080-exec-4] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/auths/track-presence POST
+2026-09-09 10:01:30.910  INFO 2768 --- [0.1-8080-exec-4] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.AuthController.trackPresence
+2026-09-09 10:01:30.910  INFO 2768 --- [0.1-8080-exec-4] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 10:01:30.911  INFO 2768 --- [0.1-8080-exec-4] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: [null]
+2026-09-09 10:01:30.934  INFO 2768 --- [0.1-8080-exec-4] cn.org.alan.exam.common.aop.LogAsPect    : 返回结果: {"code":1,"msg":"请求成功"}
+2026-09-09 10:01:30.935  INFO 2768 --- [0.1-8080-exec-4] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 结束 耗时：25 ms -------------
+2026-09-09 10:06:30.895  INFO 2768 --- [0.1-8080-exec-6] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 10:06:30.895  INFO 2768 --- [0.1-8080-exec-6] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/auths/track-presence POST
+2026-09-09 10:06:30.895  INFO 2768 --- [0.1-8080-exec-6] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.AuthController.trackPresence
+2026-09-09 10:06:30.895  INFO 2768 --- [0.1-8080-exec-6] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 10:06:30.895  INFO 2768 --- [0.1-8080-exec-6] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: [null]
+2026-09-09 10:06:30.901  INFO 2768 --- [0.1-8080-exec-6] cn.org.alan.exam.common.aop.LogAsPect    : 返回结果: {"code":1,"msg":"请求成功"}
+2026-09-09 10:06:30.902  INFO 2768 --- [0.1-8080-exec-6] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 结束 耗时：7 ms -------------
+2026-09-09 10:17:37.962  INFO 2768 --- [0.1-8080-exec-7] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 开始 -------------
+2026-09-09 10:17:37.962  INFO 2768 --- [0.1-8080-exec-7] cn.org.alan.exam.common.aop.LogAsPect    : 请求地址: http://127.0.0.1:8080/api/auths/captcha GET
+2026-09-09 10:17:37.962  INFO 2768 --- [0.1-8080-exec-7] cn.org.alan.exam.common.aop.LogAsPect    : 类名方法: cn.org.alan.exam.controller.AuthController.getCaptcha
+2026-09-09 10:17:37.962  INFO 2768 --- [0.1-8080-exec-7] cn.org.alan.exam.common.aop.LogAsPect    : 远程地址: 127.0.0.1
+2026-09-09 10:17:37.962  INFO 2768 --- [0.1-8080-exec-7] cn.org.alan.exam.common.aop.LogAsPect    : 请求参数: [null,null]
+2026-09-09 10:17:37.972  INFO 2768 --- [0.1-8080-exec-7] cn.org.alan.exam.common.aop.LogAsPect    : 返回结果: null
+2026-09-09 10:17:37.973  INFO 2768 --- [0.1-8080-exec-7] cn.org.alan.exam.common.aop.LogAsPect    : ------------- 结束 耗时：11 ms -------------
