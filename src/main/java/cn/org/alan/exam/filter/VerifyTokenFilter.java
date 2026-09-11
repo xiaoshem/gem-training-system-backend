@@ -1,13 +1,13 @@
 package cn.org.alan.exam.filter;
 
 import cn.org.alan.exam.model.entity.User;
+import cn.org.alan.exam.service.TokenSessionService;
 import cn.org.alan.exam.utils.security.SysUserDetails;
 import cn.org.alan.exam.utils.JwtUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -37,11 +36,8 @@ public class VerifyTokenFilter extends OncePerRequestFilter {
      */
     @Resource
     private JwtUtil jwtUtil;
-    /**
-     * Redis服务
-     */
     @Resource
-    private StringRedisTemplate stringRedisTemplate;
+    private TokenSessionService tokenSessionService;
 
     @Resource
     private ObjectMapper objectMapper;
@@ -54,35 +50,30 @@ public class VerifyTokenFilter extends OncePerRequestFilter {
 
         // 判断是否为空
         if (StringUtils.isBlank(token)) {
-            // throw new RuntimeException("缺少有效的 Token，请先登录！");
+            SecurityContextHolder.clearContext();
             filterChain.doFilter(request, response);
-            // responseUtil.response(response, Result.failed("Authorization为空，请先登录"), 401);
             return;
         }
 
-        // 去除 "Bearer " 前缀
-        if (token.startsWith("Bearer ")) {
-            token = token.substring(7);
-        }
-        // 从Redis中获取存储的JWT
-        String sessionId = request.getSession().getId();
-        String storedToken = stringRedisTemplate.opsForValue().get("token:" + sessionId);
-        if (StringUtils.isBlank(storedToken) ||!token.equals(storedToken)) {
+        token = tokenSessionService.normalize(token);
+        // 每个 JWT 在 Redis 中拥有独立会话，避免同一浏览器的后登录账号覆盖先登录账号。
+        if (!tokenSessionService.isActive(token)) {
+            SecurityContextHolder.clearContext();
             filterChain.doFilter(request, response);
-            // responseUtil.response(response, Result.failed("token无效，请重新登录"), 401);
             return;
         }
         // 验证并尝试续签 Token
         String refreshedToken = jwtUtil.verifyAndRefreshToken(token);
         if (refreshedToken == null) {
+            tokenSessionService.revoke(token);
+            SecurityContextHolder.clearContext();
             filterChain.doFilter(request, response);
-            // responseUtil.response(response, Result.failed("token无效或已过期，请重新登录"), 401);
             return;
         }
 
         // 如果 Token 已续签，更新 Redis 中的 Token 并设置到响应头
         if (!refreshedToken.equals(token)) {
-            stringRedisTemplate.opsForValue().set("token:" + request.getSession().getId(), refreshedToken, 30, TimeUnit.MINUTES);
+            tokenSessionService.replace(token, refreshedToken);
             response.setHeader("Authorization", "Bearer " + refreshedToken);
         }
 

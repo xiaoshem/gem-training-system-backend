@@ -11,6 +11,7 @@ import cn.org.alan.exam.model.vo.user.UserVO;
 import cn.org.alan.exam.service.IFileService;
 import cn.org.alan.exam.service.IQuestionService;
 import cn.org.alan.exam.service.IUserService;
+import cn.org.alan.exam.service.TokenSessionService;
 import cn.org.alan.exam.utils.DateTimeUtil;
 import cn.org.alan.exam.utils.SecurityUtil;
 import cn.org.alan.exam.utils.excel.ExcelUtils;
@@ -23,7 +24,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +50,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Resource
     private UserMapper userMapper;
     @Resource
-    private StringRedisTemplate stringRedisTemplate;
+    private TokenSessionService tokenSessionService;
     @Resource
     private HttpServletRequest request;
     @Resource
@@ -112,7 +112,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         int updated = userMapper.updateById(user);
         // 密码修改成功清除redis的token，让用户重新登录
         if (updated > 0) {
-            stringRedisTemplate.delete("token:" + request.getSession().getId());
+            tokenSessionService.revoke(request.getHeader("Authorization"));
             return Result.success("修改成功，请重新登录");
         }
         throw new ServiceRuntimeException("旧密码错误");

@@ -6,7 +6,7 @@ import cn.org.alan.exam.model.entity.*;
 import cn.org.alan.exam.model.enums.ExamState;
 import cn.org.alan.exam.model.vo.exam.ExamQuDetailVO;
 import cn.org.alan.exam.service.IAutoScoringService;
-import cn.org.alan.exam.utils.ClassTokenGenerator;
+import cn.org.alan.exam.service.impl.CertificateIssuanceService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import lombok.extern.slf4j.Slf4j;
@@ -38,11 +38,11 @@ public class ExamTask {
     @Resource
     private ExamQuestionMapper examQuestionMapper;
     @Resource
-    private CertificateUserMapper certificateUserMapper;
-    @Resource
     private ExamMapper examMapper;
     @Resource
     private IAutoScoringService autoScoringService;
+    @Resource
+    private CertificateIssuanceService certificateIssuanceService;
 
     /**
      * 维护任务定时检测是否有正在考试但是当前时间大于结束时间到，自动交卷
@@ -166,14 +166,6 @@ public class ExamTask {
             autoScoringService.autoScoringExam(ues.getExamId(), ues.getUserId());
             return Result.success("提交成功，待老师阅卷");
         }
-        if (userExamsScore.getUserScore() >= examOne.getPassedScore()) {
-            CertificateUser certificateUser = new CertificateUser();
-            certificateUser.setCertificateId(examOne.getCertificateId());
-            certificateUser.setUserId(ues.getUserId());
-            certificateUser.setExamId(ues.getExamId());
-            certificateUser.setCode(ClassTokenGenerator.generateClassToken(18));
-            certificateUserMapper.insert(certificateUser);
-        }
         // 查询有简答题是否回答
         Exam byId = examMapper.selectById(ues.getExamId());
         if (byId.getSaqCount() > 0) {
@@ -205,6 +197,7 @@ public class ExamTask {
                 .eq(UserExamsScore::getExamId, ues.getExamId())
                 .eq(UserExamsScore::getUserId, ues.getUserId());
         userExamsScoreMapper.update(userExamsScoreLambdaUpdateWrapper);
+        certificateIssuanceService.issueIfEligible(ues.getExamId(), ues.getUserId());
         return Result.success("交卷成功");
     }
 

@@ -38,6 +38,14 @@ public interface ExamGradeMapper extends BaseMapper<ExamGrade> {
     Integer selectClassSize(Integer id);
 
     /**
+     * 根据考试ID查询发布班级名称
+     *
+     * @param examId 考试ID
+     * @return 班级名称列表
+     */
+    List<String> selectGradeNames(@Param("examId") Integer examId);
+
+    /**
      * 查询考试班级关联列表
      *
      * @param examPage 分页page对象

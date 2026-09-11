@@ -130,6 +130,11 @@ public class ExamRecordVO {
     private Integer userScore;
 
     /**
+     * 阅卷状态：-1 无简答题，0 待批改，1 已批改
+     */
+    private Integer whetherMark;
+
+    /**
      * 交卷时间  YYYY-MM-DD hh:mm:ss
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

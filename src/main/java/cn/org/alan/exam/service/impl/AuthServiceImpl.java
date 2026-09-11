@@ -14,6 +14,7 @@ import cn.org.alan.exam.model.entity.UserDailyLoginDuration;
 import cn.org.alan.exam.model.form.auth.LoginForm;
 import cn.org.alan.exam.model.form.user.UserForm;
 import cn.org.alan.exam.service.IAuthService;
+import cn.org.alan.exam.service.TokenSessionService;
 import cn.org.alan.exam.service.ILogService;
 import cn.org.alan.exam.utils.*;
 import cn.org.alan.exam.utils.security.SysUserDetails;
@@ -27,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,7 +39,6 @@ import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.*;
 import java.util.List;
@@ -72,6 +73,8 @@ public class AuthServiceImpl implements IAuthService {
     private ObjectMapper objectMapper;
     @Resource
     private JwtUtil jwtUtil;
+    @Resource
+    private TokenSessionService tokenSessionService;
     @Resource
     private UserDailyLoginDurationMapper userDailyLoginDurationMapper;
     @Value("${online-exam.login.captcha.enabled}")
@@ -128,8 +131,8 @@ public class AuthServiceImpl implements IAuthService {
         String userInfo = objectMapper.writeValueAsString(user);
         // 创建token
         String token = jwtUtil.createJwt(userInfo, userPermissions.stream().map(String::valueOf).collect(java.util.stream.Collectors.toList()));
-        // 把token放到redis中
-        stringRedisTemplate.opsForValue().set("token:" + request.getSession().getId(), token, 30, TimeUnit.MINUTES);
+        // 每个 JWT 独立保存，允许同一浏览器的不同标签页分别登录不同账号。
+        tokenSessionService.store(token);
 
         // 封装用户的身份信息，为后续的身份验证和授权操作提供必要的输入
         // 创建UsernamePasswordAuthenticationToken  参数：用户信息，密码，权限列表
@@ -183,22 +186,23 @@ public class AuthServiceImpl implements IAuthService {
      */
     @Override
     public Result<String> logout(HttpServletRequest request) {
-        // 清除session
-        HttpSession session = request.getSession(false);
         String token = request.getHeader("Authorization");
-        if (StringUtils.isNotBlank(token) && session != null) {
-            // 记录日志
-            String device = httpServletRequest.getHeader("User-Agent");
-            String ipRegion = Optional.ofNullable(IPUtils.getIPRegion(httpServletRequest)).orElse("暂无信息");
-            Log log = Log.builder()
-                    .place(ipRegion)
-                    .device(extractDeviceType(device))
-                    .behavior("设备登出")
-                    .userId(SecurityUtil.getUserId()).build();
-            logService.add(log);
-            token = token.substring(7);
-            stringRedisTemplate.delete("token:" + request.getSession().getId());
-            session.invalidate();
+        if (StringUtils.isNotBlank(token)) {
+            tokenSessionService.revoke(token);
+
+            // 令牌已经失效时安全上下文中没有当前用户，此时仍应允许客户端完成退出。
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.getPrincipal() instanceof SysUserDetails) {
+                SysUserDetails currentUser = (SysUserDetails) authentication.getPrincipal();
+                String device = httpServletRequest.getHeader("User-Agent");
+                String ipRegion = Optional.ofNullable(IPUtils.getIPRegion(httpServletRequest)).orElse("暂无信息");
+                Log log = Log.builder()
+                        .place(ipRegion)
+                        .device(extractDeviceType(device))
+                        .behavior("设备登出")
+                        .userId(currentUser.getUser().getId()).build();
+                logService.add(log);
+            }
         }
         return Result.success("退出成功");
     }

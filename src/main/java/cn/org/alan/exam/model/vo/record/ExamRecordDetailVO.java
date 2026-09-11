@@ -38,6 +38,18 @@ public class ExamRecordDetailVO {
      */
     private Integer isRight;
     /**
+     * 本题满分
+     */
+    private Integer fullScore;
+    /**
+     * 本题得分，未批改时为空
+     */
+    private Integer earnedScore;
+    /**
+     * 判定结果：CORRECT、WRONG、PARTIAL、PENDING、UNANSWERED
+     */
+    private String resultStatus;
+    /**
      * 试题分析
      */
     private String analyse;

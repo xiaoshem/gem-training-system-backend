@@ -53,14 +53,22 @@
         u.real_name,
         u.role_id as roleId,
         u.create_time,
-        g.grade_name,
-        g.user_id
+        case
+            when u.role_id = 2 then (
+                select group_concat(distinct teacher_grade.grade_name order by teacher_grade.grade_name separator '、')
+                from t_user_grade teacher_user_grade
+                join t_grade teacher_grade on teacher_user_grade.g_id = teacher_grade.id
+                where teacher_user_grade.u_id = u.id
+                  and teacher_user_grade.is_deleted = 0
+                  and teacher_grade.is_deleted = 0
+            )
+            else student_grade.grade_name
+        end as gradeName,
+        student_grade.user_id as userId
         from t_user as u
-        <if test="roleId == null || roleId == 0">
-            left join t_grade as g on u.grade_id = g.id
-        </if>
+        left join t_grade as student_grade on u.grade_id = student_grade.id
         <if test="roleId != null and roleId == 1">
-            left join t_grade as g on u.grade_id = g.id and g.id in
+            and student_grade.id in
             <foreach collection="gradeIdList" item="gId" open="(" close=")" separator=",">
                 #{gId}
             </foreach>
@@ -68,13 +76,22 @@
         <trim prefixOverrides="and" prefix="where">
             u.is_deleted = 0
             <if test="gradeId != null and gradeId != 0">
-                and u.grade_id = #{gradeId}
+                and (
+                    (u.role_id = 2 and exists (
+                        select 1
+                        from t_user_grade filter_user_grade
+                        where filter_user_grade.u_id = u.id
+                          and filter_user_grade.g_id = #{gradeId}
+                          and filter_user_grade.is_deleted = 0
+                    ))
+                    or (u.role_id != 2 and u.grade_id = #{gradeId})
+                )
             </if>
             <if test='realName != null and realName !=""'>
                 and u.real_name like concat('%',#{realName},'%')
             </if>
             <if test="roleId != null and roleId == 1">
-                and u.role_id = 1 and g.is_deleted = 0
+                and u.role_id = 1 and student_grade.is_deleted = 0
             </if>
             <if test="roleId == null ">
                 and u.role_id in(1,2,3)

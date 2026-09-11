@@ -25,6 +25,15 @@
         where eg.exam_id = #{id}
     </select>
 
+    <!-- 根据考试id查询发布班级 -->
+    <select id="selectGradeNames" resultType="java.lang.String">
+        select g.grade_name
+        from t_exam_grade as eg
+        join t_grade as g on eg.grade_id = g.id
+        where eg.exam_id = #{examId} and g.is_deleted = 0
+        order by eg.id
+    </select>
+
     <!-- 查询考试班级关联列表 -->
     <select id="selectClassExam" resultType="cn.org.alan.exam.model.vo.exam.ExamGradeListVO">
         select *

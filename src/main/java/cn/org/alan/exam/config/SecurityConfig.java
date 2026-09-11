@@ -5,12 +5,14 @@ import cn.org.alan.exam.common.result.Result;
 import cn.org.alan.exam.utils.ResponseUtil;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -44,6 +46,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 开启 CORS（跨域资源共享）支持，并禁用 CSRF（跨站请求伪造）保护
         http.cors().and().csrf().disable();
 
+        // 登录身份完全由每次请求携带的 JWT 决定，不在共享的 JSESSIONID 中保存身份。
+        // 业务仍可使用 HttpSession 保存登录前的图形验证码。
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
         // 开始配置请求的授权规则
         http.authorizeRequests()
                 // 定义一系列允许匿名访问（即无需身份验证即可访问）的请求路径
@@ -69,9 +75,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 配置异常处理器，当用户访问没有权限的资源时，会调用该处理器进行处理
         http.exceptionHandling()
+                .authenticationEntryPoint((request, response, authenticationException) ->
+                        responseUtil.response(
+                                response,
+                                Result.failed("登录已过期，请重新登录"),
+                                HttpServletResponse.SC_UNAUTHORIZED
+                        ))
                 .accessDeniedHandler((request, response, accessDeniedException) ->
                         // 使用响应体封装工具类将错误信息封装成特定的结果返回给客户端
-                        responseUtil.response(response, Result.failed("你没有该资源的访问权限"))
+                        responseUtil.response(
+                                response,
+                                Result.failed("你没有该资源的访问权限"),
+                                HttpServletResponse.SC_FORBIDDEN
+                        )
                 );
 
         // 禁用 Spring Security 自带的基于表单的登录页面

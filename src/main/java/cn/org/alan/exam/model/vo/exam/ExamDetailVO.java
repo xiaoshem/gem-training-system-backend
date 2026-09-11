@@ -1,5 +1,6 @@
 package cn.org.alan.exam.model.vo.exam;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -7,6 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @Author Alan
@@ -43,6 +45,11 @@ public class ExamDetailVO {
      * 总分数
      */
     private Integer grossScore;
+
+    /**
+     * 发布班级名称
+     */
+    private List<String> gradeNames;
 
     /**
      * 最大切屏次数
@@ -102,11 +109,13 @@ public class ExamDetailVO {
     /**
      * 开始时间     YYYY-MM-DD hh:mm:ss
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startTime;
 
     /**
      * 结束时间     YYYY-MM-DD hh:mm:ss
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
 
 }

@@ -56,6 +56,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         if (questionFrom.getQuType() != 4 && (Objects.isNull(options) || options.size() < 2)) {
             return Result.failed("非简答题的试题选项不能少于两个");
         }
+        if (questionFrom.getQuType() == 4 && !hasShortAnswerReference(options)) {
+            return Result.failed("简答题参考答案不能为空");
+        }
         Question question = questionConverter.fromToEntity(questionFrom);
         // 开始添加题干
         questionMapper.insert(question);
@@ -112,6 +115,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     @Transactional
     public Result<String> updateQuestion(QuestionFrom questionFrom) {
+        if (questionFrom.getQuType() == 4 && !hasShortAnswerReference(questionFrom.getOptions())) {
+            return Result.failed("简答题参考答案不能为空");
+        }
         // 修改试题
         Question question = questionConverter.fromToEntity(questionFrom);
         questionMapper.updateById(question);
@@ -121,6 +127,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             optionMapper.updateById(option);
         }
         return Result.success("修改试题成功");
+    }
+
+    private boolean hasShortAnswerReference(List<Option> options) {
+        return !Objects.isNull(options)
+                && !options.isEmpty()
+                && StringUtils.isNotBlank(options.get(0).getContent());
     }
 
     @SneakyThrows(Exception.class)

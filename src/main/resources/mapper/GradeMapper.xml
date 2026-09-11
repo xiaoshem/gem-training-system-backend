@@ -53,10 +53,16 @@
 
     <!-- 获得所有班级 -->
     <select id="getAllGrade" resultType="cn.org.alan.exam.model.vo.grade.GradeVO">
-        select *
+        select distinct
+        g.id,
+        g.grade_name as gradeName,
+        g.user_id as userId,
+        g.code
         from t_grade g
         <if test="roleCode == 2">
-            right join t_user_grade ug on ug.g_id = g.id
+            join t_user_grade ug on ug.g_id = g.id
+                and ug.u_id = #{userId}
+                and ug.is_deleted = 0
         </if>
         <where>
             g.is_deleted = 0

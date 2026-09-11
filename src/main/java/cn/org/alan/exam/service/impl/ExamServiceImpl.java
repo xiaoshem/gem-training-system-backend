@@ -16,7 +16,6 @@ import cn.org.alan.exam.service.IAutoScoringService;
 import cn.org.alan.exam.service.IExamService;
 import cn.org.alan.exam.service.IOptionService;
 import cn.org.alan.exam.service.IQuestionService;
-import cn.org.alan.exam.utils.ClassTokenGenerator;
 import cn.org.alan.exam.utils.SecurityUtil;
 import com.aliyun.oss.ServiceException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -70,11 +69,11 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements IE
     @Resource
     private UserMapper userMapper;
     @Resource
-    private CertificateUserMapper certificateUserMapper;
-    @Resource
     private IAutoScoringService autoScoringService;
     @Resource
     private OnlineExamConfig onlineExamConfig;
+    @Resource
+    private CertificateIssuanceService certificateIssuanceService;
 
     @Override
     @Transactional
@@ -563,6 +562,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements IE
         userLambdaQueryWrapper.eq(User::getId, examDetailVO.getUserId());
         User user = userMapper.selectOne(userLambdaQueryWrapper);
         examDetailVO.setUsername(user.getUserName());
+        examDetailVO.setGradeNames(examGradeMapper.selectGradeNames(examId));
         return Result.success("查询成功", examDetailVO);
     }
 
@@ -1032,23 +1032,14 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements IE
                 // log.error("AI阅卷失败，考试ID: {}, 用户ID: {}", examId, SecurityUtil.getUserId(), e);
                 // return Result.success("提交成功，待老师阅卷");
             }
-            handOutCer(examId, examOne);
         }
 
-        // 如果无需阅卷，检查是否需要发放证书
-        if (whetherMark == -1 && examOne.getCertificateId() != null && examOne.getPassedScore() != null && calculatedScore >= examOne.getPassedScore()) {
-            handOutCer(examId, examOne);
+        // 无简答题时成绩已经最终确认，可以统一检查发证条件。
+        // 含简答题的考试必须等教师批改完成后再检查，不能在这里提前发证。
+        if (whetherMark == -1) {
+            certificateIssuanceService.issueIfEligible(examId, SecurityUtil.getUserId());
         }
         return Result.success("交卷成功");
-    }
-
-    private void handOutCer(Integer examId, Exam examOne) {
-        CertificateUser certificateUser = new CertificateUser();
-        certificateUser.setCertificateId(examOne.getCertificateId());
-        certificateUser.setUserId(SecurityUtil.getUserId());
-        certificateUser.setExamId(examId);
-        certificateUser.setCode(ClassTokenGenerator.generateClassToken(18));
-        certificateUserMapper.insert(certificateUser);
     }
 
     @Override

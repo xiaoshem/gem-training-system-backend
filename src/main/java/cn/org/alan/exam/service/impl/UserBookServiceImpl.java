@@ -109,7 +109,6 @@ public class UserBookServiceImpl extends ServiceImpl<UserBookMapper, UserBook> i
         LambdaQueryWrapper<Option> opWrapper = new LambdaQueryWrapper<>();
         opWrapper.eq(Option::getQuId, reUserBookForm.getQuId());
         List<Option> options = optionMapper.selectList(opWrapper);
-        String current = "";
         ArrayList<Integer> strings = new ArrayList<>();
         for (Option temp : options) {
             if (temp.getIsRight() == 1) {
@@ -118,8 +117,22 @@ public class UserBookServiceImpl extends ServiceImpl<UserBookMapper, UserBook> i
         }
         List<String> stringList = strings.stream().map(String::valueOf).collect(Collectors.toList());
         String result = String.join(",", stringList);
+        String shortAnswerReference = null;
         if (quType == 4) {
-            addBookAnswerVO.setRightAnswers(options.get(0).getContent());
+            for (Option option : options) {
+                if (StringUtils.isNotBlank(option.getContent())) {
+                    shortAnswerReference = option.getContent();
+                    break;
+                }
+            }
+            // 兼容旧数据：早期简答题可能没有保存参考答案，而是将答案写在试题解析中。
+            if (StringUtils.isBlank(shortAnswerReference)) {
+                shortAnswerReference = qu.getAnalysis();
+            }
+            if (StringUtils.isBlank(shortAnswerReference)) {
+                return Result.failed("该简答题未设置参考答案，请联系教师完善试题");
+            }
+            addBookAnswerVO.setRightAnswers(shortAnswerReference);
         } else {
             addBookAnswerVO.setRightAnswers(result);
         }
@@ -184,12 +197,13 @@ public class UserBookServiceImpl extends ServiceImpl<UserBookMapper, UserBook> i
                     return Result.success("回答错误", addBookAnswerVO);
                 }
             case 4:
-                if ("1".equals(reUserBookForm.getAnswer())) {
+                if (normalizeAnswer(shortAnswerReference).equals(normalizeAnswer(reUserBookForm.getAnswer()))) {
                     LambdaQueryWrapper<UserBook> userBookLambdaQueryWrapper4 = new LambdaQueryWrapper<>();
                     userBookLambdaQueryWrapper4.eq(UserBook::getUserId, userId)
                             .eq(UserBook::getExamId, reUserBookForm.getExamId())
                             .eq(UserBook::getQuId, reUserBookForm.getQuId());
                     userBookMapper.delete(userBookLambdaQueryWrapper4);
+                    addBookAnswerVO.setCorrect(1);
                     return Result.success("回答正确，已移除错题本", addBookAnswerVO);
                 }
                 addBookAnswerVO.setCorrect(0);
@@ -197,5 +211,12 @@ public class UserBookServiceImpl extends ServiceImpl<UserBookMapper, UserBook> i
             default:
                 throw new ServiceRuntimeException("填充答案请求错误");
         }
+    }
+
+    /**
+     * 忽略答案首尾空白以及输入过程中产生的空格、换行和制表符。
+     */
+    private String normalizeAnswer(String answer) {
+        return answer == null ? "" : answer.trim().replaceAll("\\s+", "");
     }
 }

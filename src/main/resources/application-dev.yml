@@ -8,7 +8,7 @@ spring:
     allow-circular-references: true
   # mysql配置
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/db_exam?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8
+    url: jdbc:mysql://127.0.0.1:3306/db_exam?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver

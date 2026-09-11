@@ -1,6 +1,5 @@
 package cn.org.alan.exam.service.impl;
 
-import cn.org.alan.exam.common.exception.ServiceRuntimeException;
 import cn.org.alan.exam.mapper.ExamGradeMapper;
 import cn.org.alan.exam.common.result.Result;
 import cn.org.alan.exam.mapper.*;
@@ -16,6 +15,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -49,7 +49,7 @@ public class StatServiceImpl extends ServiceImpl<ExamGradeMapper, ExamGrade> imp
         if (roleCode==2) {
             List<Integer> gradeIdList = userGradeMapper.getGradeIdListByUserId(userId);
             if(gradeIdList.isEmpty()){
-                throw new ServiceRuntimeException("教师还没加入班级暂无数据");
+                return Result.success("教师暂未加入班级", Collections.emptyList());
             }
             gradeStudentVOs = statMapper.StudentGradeCount(2, userId,gradeIdList);
         } else {
@@ -67,7 +67,7 @@ public class StatServiceImpl extends ServiceImpl<ExamGradeMapper, ExamGrade> imp
         if (roleCode==2) {
             List<Integer> gradeIdList = userGradeMapper.getGradeIdListByUserId(userId);
             if(gradeIdList.isEmpty()){
-                throw new ServiceRuntimeException("教师还没加入班级暂无数据");
+                return Result.success("教师暂未加入班级", Collections.emptyList());
             }
             gradeExamVOs = statMapper.ExamGradeCount(2, userId,gradeIdList);
         } else {
@@ -110,4 +110,3 @@ public class StatServiceImpl extends ServiceImpl<ExamGradeMapper, ExamGrade> imp
         return Result.success("请求成功",daily);
     }
 }
-

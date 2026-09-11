@@ -19,6 +19,7 @@ import cn.org.alan.exam.service.IOptionService;
 import cn.org.alan.exam.utils.SecurityUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,8 @@ public class ExerciseRecordServiceImpl extends ServiceImpl<ExerciseRecordMapper,
     private OptionMapper optionMapper;
     @Resource
     private ExamQuAnswerMapper examQuAnswerMapper;
+    @Resource
+    private ManualScoreMapper manualScoreMapper;
     @Resource
     private IOptionService optionService;
     @Resource
@@ -109,13 +112,20 @@ public class ExerciseRecordServiceImpl extends ServiceImpl<ExerciseRecordMapper,
                 .collect(Collectors.toList());
         // 查询题干列表
         List<Question> questions = questionMapper.selectBatchIds(quIds);
-        for (Question temp : questions) {
+        Map<Integer, Question> questionMap = questions.stream()
+                .collect(Collectors.toMap(Question::getId, question -> question));
+        for (ExamQuestion examQuestion : examQuestions) {
+            Question temp = questionMap.get(examQuestion.getQuestionId());
+            if (temp == null) {
+                continue;
+            }
             // 创建返回对象
             ExamRecordDetailVO examRecordDetailVO = new ExamRecordDetailVO();
             // 设置标题
             examRecordDetailVO.setImage(temp.getImage());
             examRecordDetailVO.setTitle(temp.getContent());
             examRecordDetailVO.setQuType(temp.getQuType());
+            examRecordDetailVO.setFullScore(examQuestion.getScore() == null ? 0 : examQuestion.getScore());
             // 设置分析
             examRecordDetailVO.setAnalyse(temp.getAnalysis());
             // 查询试题选项
@@ -138,10 +148,20 @@ public class ExerciseRecordServiceImpl extends ServiceImpl<ExerciseRecordMapper,
             opWrapper.eq(Option::getQuId, temp.getId());
             List<Option> opList = optionMapper.selectList(opWrapper);
 
-            if (temp.getQuType() == 4 && opList.size() > 0) {
-                examRecordDetailVO.setRightOption(opList.get(0).getContent());
+            if (temp.getQuType() == 4) {
+                String referenceAnswer = null;
+                for (Option option : opList) {
+                    if (StringUtils.isNotBlank(option.getContent())) {
+                        referenceAnswer = option.getContent();
+                        break;
+                    }
+                }
+                // 兼容早期将简答题参考答案填写在试题解析中的数据。
+                if (StringUtils.isBlank(referenceAnswer)) {
+                    referenceAnswer = temp.getAnalysis();
+                }
+                examRecordDetailVO.setRightOption(referenceAnswer);
             } else {
-                String current = "";
                 ArrayList<Integer> strings = new ArrayList<>();
                 for (Option temp1 : options) {
                     if (temp1.getIsRight() == 1) {
@@ -163,6 +183,8 @@ public class ExerciseRecordServiceImpl extends ServiceImpl<ExerciseRecordMapper,
             if (examQuAnswer == null) {
                 examRecordDetailVO.setMyOption(null);
                 examRecordDetailVO.setIsRight(-1);
+                examRecordDetailVO.setEarnedScore(0);
+                examRecordDetailVO.setResultStatus("UNANSWERED");
                 examRecordDetailVOS.add(examRecordDetailVO);
                 continue;
             }
@@ -231,10 +253,40 @@ public class ExerciseRecordServiceImpl extends ServiceImpl<ExerciseRecordMapper,
                     break;
                 case 4:
                     examRecordDetailVO.setMyOption(examQuAnswer.getAnswerContent());
-                    examRecordDetailVO.setIsRight(-1);
+                    LambdaQueryWrapper<ManualScore> manualScoreWrapper = new LambdaQueryWrapper<>();
+                    manualScoreWrapper.eq(ManualScore::getExamQuAnswerId, examQuAnswer.getId())
+                            .orderByDesc(ManualScore::getId)
+                            .last("limit 1");
+                    ManualScore manualScore = manualScoreMapper.selectOne(manualScoreWrapper);
+                    Integer subjectiveScore = manualScore == null
+                            ? examQuAnswer.getAiScore()
+                            : manualScore.getScore();
+                    if (subjectiveScore == null) {
+                        examRecordDetailVO.setIsRight(-1);
+                        examRecordDetailVO.setEarnedScore(null);
+                        examRecordDetailVO.setResultStatus("PENDING");
+                    } else {
+                        examRecordDetailVO.setEarnedScore(subjectiveScore);
+                        if (subjectiveScore >= examRecordDetailVO.getFullScore()) {
+                            examRecordDetailVO.setIsRight(1);
+                            examRecordDetailVO.setResultStatus("CORRECT");
+                        } else if (subjectiveScore <= 0) {
+                            examRecordDetailVO.setIsRight(0);
+                            examRecordDetailVO.setResultStatus("WRONG");
+                        } else {
+                            examRecordDetailVO.setIsRight(0);
+                            examRecordDetailVO.setResultStatus("PARTIAL");
+                        }
+                    }
                     break;
                 default:
                     break;
+            }
+            if (quType != 4) {
+                boolean isCorrect = Integer.valueOf(1).equals(examQuAnswer.getIsRight());
+                examRecordDetailVO.setIsRight(isCorrect ? 1 : 0);
+                examRecordDetailVO.setEarnedScore(isCorrect ? examRecordDetailVO.getFullScore() : 0);
+                examRecordDetailVO.setResultStatus(isCorrect ? "CORRECT" : "WRONG");
             }
             examRecordDetailVOS.add(examRecordDetailVO);
 
