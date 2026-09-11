@@ -39,7 +39,7 @@ public class SecurityUtil {
     }
 
     /**
-     * 获取当前用户角色代码 1：学生、2：教师、3管理员
+     * 获取当前用户角色代码 1：学员、2：培训讲师、3：系统管理员、4：认证审核员
      *
      * @return 角色
      */
@@ -53,6 +53,8 @@ public class SecurityUtil {
             roleCode = 2;
         } else if ("role_student".equals(roleName)) {
             roleCode = 1;
+        } else if ("role_auditor".equals(roleName)) {
+            roleCode = 4;
         } else {
             throw new ServiceRuntimeException("无法获取角色代码");
         }

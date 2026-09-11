@@ -38,7 +38,7 @@ public class UserController {
      */
     @ApiOperation("获取用户个人信息")
     @GetMapping("/info")
-    @PreAuthorize("hasAnyAuthority('role_student','role_teacher','role_admin')")
+    @PreAuthorize("hasAnyAuthority('role_student','role_teacher','role_admin','role_auditor')")
     public Result<UserVO> info() {
         return iUserService.info();
     }
@@ -65,9 +65,23 @@ public class UserController {
      */
     @ApiOperation("用户修改密码")
     @PutMapping
-    @PreAuthorize("hasAnyAuthority('role_student','role_teacher','role_admin')")
+    @PreAuthorize("hasAnyAuthority('role_student','role_teacher','role_admin','role_auditor')")
     public Result<String> updatePassword(@Validated(UserGroup.UpdatePasswordGroup.class) @RequestBody UserForm userForm) {
         return iUserService.updatePassword(userForm);
+    }
+
+    /**
+     * 修改当前用户的个人资料。
+     *
+     * @param userForm 个人资料
+     * @return 响应结果
+     */
+    @ApiOperation("修改个人资料")
+    @PutMapping("/profile")
+    @PreAuthorize("hasAnyAuthority('role_student','role_teacher','role_admin','role_auditor')")
+    public Result<String> updateProfile(
+            @Validated(UserGroup.UpdateProfileGroup.class) @RequestBody UserForm userForm) {
+        return iUserService.updateProfile(userForm);
     }
 
     /**
@@ -137,7 +151,7 @@ public class UserController {
      */
     @ApiOperation("用户上传头像")
     @PutMapping("/uploadAvatar")
-    @PreAuthorize("hasAnyAuthority('role_student','role_teacher','role_admin')")
+    @PreAuthorize("hasAnyAuthority('role_student','role_teacher','role_admin','role_auditor')")
     public Result<String> uploadAvatar(@RequestPart("file") MultipartFile file) {
         return iUserService.uploadAvatar(file);
     }

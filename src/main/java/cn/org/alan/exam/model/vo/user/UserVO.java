@@ -18,6 +18,14 @@ public class UserVO {
     private String userName;
     // 真实姓名
     private String realName;
+    // 脱敏身份证号
+    private String idCard;
+    // 所在企业或单位
+    private String organization;
+    // 岗位
+    private String position;
+    // 脱敏联系电话
+    private String phone;
     // 用户角色
     private Integer roleId;
     // 密码

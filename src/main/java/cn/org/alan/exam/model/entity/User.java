@@ -31,6 +31,18 @@ public class User implements Serializable {
     @ApiModelProperty("真实姓名")
     private String realName;
 
+    @ApiModelProperty("身份证号")
+    private String idCard;
+
+    @ApiModelProperty("所在企业或单位")
+    private String organization;
+
+    @ApiModelProperty("岗位")
+    private String position;
+
+    @ApiModelProperty("联系电话")
+    private String phone;
+
     @ApiModelProperty("密码")
     @TableField(fill = FieldFill.INSERT)
     private String password;
