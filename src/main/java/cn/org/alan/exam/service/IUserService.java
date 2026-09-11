@@ -33,6 +33,14 @@ public interface IUserService extends IService<User> {
     Result<String> updatePassword(UserForm userForm);
 
     /**
+     * 用户修改个人资料。身份证号和联系电话留空时保持原值。
+     *
+     * @param userForm 个人资料
+     * @return 响应结果
+     */
+    Result<String> updateProfile(UserForm userForm);
+
+    /**
      * 批量删除用户
      *
      * @param ids 删除用用户id

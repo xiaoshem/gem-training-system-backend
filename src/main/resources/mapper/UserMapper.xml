@@ -3,16 +3,29 @@
 <mapper namespace="cn.org.alan.exam.mapper.UserMapper">
 
     <sql id="simpleFiled">
-        u.id,u.user_name,u.real_name,u.avatar,u.create_time,u.status
+        u.id,u.user_name,u.real_name,u.role_id,
+        case
+            when u.id_card is null or u.id_card = '' then null
+            else concat(left(u.id_card, 3), '***********', right(u.id_card, 4))
+        end as idCard,
+        u.organization,u.position,
+        case
+            when u.phone is null or u.phone = '' then null
+            else concat(left(u.phone, 3), '****', right(u.phone, 4))
+        end as phone,
+        u.avatar,u.create_time,u.status
     </sql>
 
     <!-- 批量添加用户 -->
     <insert id="insertBatchUser">
         insert into t_user
+        (user_name, real_name, id_card, organization, position, phone, password,
+         avatar, role_id, grade_id, create_time, status, is_deleted)
         values
         <foreach collection="list" item="user" separator=",">
-            (null,#{user.userName},#{user.realName},#{user.password},
-            null,#{user.roleId},null,#{user.createTime},1,0)
+            (#{user.userName},#{user.realName},#{user.idCard},#{user.organization},
+             #{user.position},#{user.phone},#{user.password},null,#{user.roleId},
+             null,#{user.createTime},1,0)
         </foreach>
     </insert>
 
@@ -51,6 +64,16 @@
         select u.id,
         u.user_name,
         u.real_name,
+        case
+            when u.id_card is null or u.id_card = '' then null
+            else concat(left(u.id_card, 3), '***********', right(u.id_card, 4))
+        end as idCard,
+        u.organization,
+        u.position,
+        case
+            when u.phone is null or u.phone = '' then null
+            else concat(left(u.phone, 3), '****', right(u.phone, 4))
+        end as phone,
         u.role_id as roleId,
         u.create_time,
         case
@@ -94,7 +117,7 @@
                 and u.role_id = 1 and student_grade.is_deleted = 0
             </if>
             <if test="roleId == null ">
-                and u.role_id in(1,2,3)
+                and u.role_id in(1,2,3,4)
             </if>
         </trim>
         order by u.create_time desc

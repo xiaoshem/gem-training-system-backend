@@ -18,6 +18,10 @@ public interface UserGroup {
     interface UpdatePasswordGroup extends UserGroup {
     }
 
+    // 用户修改个人资料入参校验参数分组
+    interface UpdateProfileGroup extends UserGroup {
+    }
+
     interface RegisterGroup extends UserGroup {
     }
 }

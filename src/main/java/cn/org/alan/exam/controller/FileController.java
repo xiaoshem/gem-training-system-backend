@@ -34,7 +34,7 @@ public class FileController {
      */
     @ApiOperation("上传图片")
     @PostMapping("/image")
-    @PreAuthorize("hasAnyAuthority('role_student','role_teacher','role_admin')")
+    @PreAuthorize("hasAnyAuthority('role_student','role_teacher','role_admin','role_auditor')")
     public Result<String> uploadAvatar(@RequestPart("file") MultipartFile file) {
         return fileService.uploadImage(file);
     }

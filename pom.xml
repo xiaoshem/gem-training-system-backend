@@ -128,7 +128,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
-            <scope>true</scope>
         </dependency>
         <!-- Spring Boot Redis 依赖，用于与 Redis 数据库交互 -->
         <dependency>

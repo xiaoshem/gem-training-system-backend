@@ -34,7 +34,7 @@ public class ReplyController {
      */
     @PostMapping("add")
     @ApiOperation("添加回复")
-    @PreAuthorize("hasAnyAuthority('role_student,role_teacher')")
+    @PreAuthorize("hasAnyAuthority('role_student','role_teacher')")
     public Result<Reply> addReply(@RequestBody ReplyForm replyForm) {
         Reply reply = replyService.addReply(replyForm);
         return Result.success("回复成功", reply);
@@ -46,7 +46,7 @@ public class ReplyController {
      * @param id id
      * @return 返回id
      */
-    @PreAuthorize("hasAnyAuthority('role_student,role_teacher')")
+    @PreAuthorize("hasAnyAuthority('role_student','role_teacher')")
     @ApiOperation("删除回复")
     @DeleteMapping("/delete/{id}")
     public Result<Integer> deleteReply(@PathVariable("id") Integer id) {
@@ -61,7 +61,7 @@ public class ReplyController {
      * @param id      讨论id
      * @return 评论
      */
-    @PreAuthorize("hasAnyAuthority('role_student,role_teacher')")
+    @PreAuthorize("hasAnyAuthority('role_student','role_teacher')")
     @ApiOperation("根据讨论id获取评论")
     @GetMapping("/query/{orderBy}/{id}")
     public Result<List<ReplyVo>> queryReplyByDiscussionId(@PathVariable("orderBy") Integer orderBy, @PathVariable("id") Integer id) {

@@ -79,12 +79,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (roleCode == 2) {
             userForm.setRoleId(1);
         }
-        if(userForm.getRoleId()==2&&userForm.getGradeId()!=null){
-            throw new ServiceRuntimeException("教师无法设置单一班级");
-        }
-        // 避免管理员创建用户不传递角色
+        // 管理员创建用户时必须明确选择角色，先校验再参与数值比较。
         if (userForm.getRoleId() == null || userForm.getRoleId() == 0) {
             throw new ServiceRuntimeException("未选择用户角色");
+        }
+        if ((userForm.getRoleId() == 2 || userForm.getRoleId() == 4)
+                && userForm.getGradeId() != null) {
+            throw new ServiceRuntimeException("讲师或认证审核员无法设置单一班级");
+        }
+        if (!Arrays.asList(1, 2, 4).contains(userForm.getRoleId())) {
+            throw new ServiceRuntimeException("只能创建学员、培训讲师或认证审核员");
         }
         User user = userConverter.fromToEntity(userForm);
         // 调用Mapper插入用户
@@ -117,6 +121,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         throw new ServiceRuntimeException("旧密码错误");
 
+    }
+
+    @Override
+    @Transactional
+    public Result<String> updateProfile(UserForm userForm) {
+        Integer userId = SecurityUtil.getUserId();
+        User user = new User();
+        user.setId(userId);
+        user.setRealName(userForm.getRealName().trim());
+        user.setOrganization(trimToNull(userForm.getOrganization()));
+        user.setPosition(trimToNull(userForm.getPosition()));
+        if (StringUtils.isNotBlank(userForm.getIdCard())) {
+            user.setIdCard(userForm.getIdCard().trim().toUpperCase());
+        }
+        if (StringUtils.isNotBlank(userForm.getPhone())) {
+            user.setPhone(userForm.getPhone().trim());
+        }
+        if (userMapper.updateById(user) > 0) {
+            return Result.success("个人资料修改成功");
+        }
+        throw new ServiceRuntimeException("个人资料修改失败");
+    }
+
+    private String trimToNull(String value) {
+        return StringUtils.isBlank(value) ? null : value.trim();
     }
 
     @Override

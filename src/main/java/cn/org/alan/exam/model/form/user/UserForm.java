@@ -6,6 +6,8 @@ import cn.org.alan.exam.utils.excel.ExcelImport;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 
@@ -33,9 +35,27 @@ public class UserForm {
     private String password;
 
     // 真实姓名
-    @NotBlank(groups = {UserGroup.CreateUserGroup.class, UserGroup.RegisterGroup.class}, message = "真实姓名不能为空")
+    @NotBlank(groups = {UserGroup.CreateUserGroup.class, UserGroup.RegisterGroup.class,
+            UserGroup.UpdateProfileGroup.class}, message = "真实姓名不能为空")
     @ExcelImport(value = "真实姓名*")
     private String realName;
+
+    // 身份证号。个人中心查询仅返回脱敏值，更新时留空表示不修改。
+    @Pattern(groups = {UserGroup.CreateUserGroup.class, UserGroup.RegisterGroup.class,
+            UserGroup.UpdateProfileGroup.class}, regexp = "(^$)|(^\\d{17}[0-9Xx]$)", message = "身份证号格式不正确")
+    private String idCard;
+
+    @Size(groups = {UserGroup.CreateUserGroup.class, UserGroup.RegisterGroup.class,
+            UserGroup.UpdateProfileGroup.class}, max = 150, message = "所在企业或单位不能超过150个字符")
+    private String organization;
+
+    @Size(groups = {UserGroup.CreateUserGroup.class, UserGroup.RegisterGroup.class,
+            UserGroup.UpdateProfileGroup.class}, max = 100, message = "岗位不能超过100个字符")
+    private String position;
+
+    @Pattern(groups = {UserGroup.CreateUserGroup.class, UserGroup.RegisterGroup.class,
+            UserGroup.UpdateProfileGroup.class}, regexp = "(^$)|(^1\\d{10}$)", message = "联系电话格式不正确")
+    private String phone;
 
     // 角色ID
     @ExcelImport(value = "角色")
