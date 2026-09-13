@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.alan.exam.mapper.CourseMapper">
+    <sql id="courseFields">
+        c.id,
+        c.course_code AS courseCode,
+        c.course_name AS courseName,
+        c.course_category AS courseCategory,
+        c.course_description AS courseDescription,
+        c.cover_image AS coverImage,
+        c.syllabus,
+        c.total_hours AS totalHours,
+        c.target_audience AS targetAudience,
+        c.prerequisites,
+        c.default_instructor_id AS defaultInstructorId,
+        default_user.real_name AS defaultInstructorName,
+        (SELECT GROUP_CONCAT(DISTINCT instructor_user.real_name ORDER BY instructor_user.real_name SEPARATOR '、')
+         FROM t_course_instructor relation
+         JOIN t_user instructor_user ON instructor_user.id = relation.instructor_id
+         WHERE relation.course_id = c.id AND instructor_user.is_deleted = 0) AS instructorNames,
+        c.skill_indicators AS skillIndicators,
+        c.scoring_rules AS scoringRules,
+        c.status,
+        c.create_time AS createTime,
+        c.update_time AS updateTime
+    </sql>
+
+    <select id="selectCoursePage" resultType="cn.org.alan.exam.model.vo.training.CourseVO">
+        SELECT <include refid="courseFields"/>
+        FROM t_course c
+        LEFT JOIN t_user default_user ON default_user.id = c.default_instructor_id
+        <where>
+            c.is_deleted = 0
+            <if test="keyword != null and keyword != ''">
+                AND (c.course_name LIKE CONCAT('%', #{keyword}, '%')
+                     OR c.course_code LIKE CONCAT('%', #{keyword}, '%')
+                     OR c.course_category LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="status != null and status != ''">
+                AND c.status = #{status}
+            </if>
+        </where>
+        ORDER BY c.create_time DESC, c.id DESC
+    </select>
+
+    <select id="selectCourseVOById" resultType="cn.org.alan.exam.model.vo.training.CourseVO">
+        SELECT <include refid="courseFields"/>
+        FROM t_course c
+        LEFT JOIN t_user default_user ON default_user.id = c.default_instructor_id
+        WHERE c.id = #{id} AND c.is_deleted = 0
+    </select>
+
+    <select id="selectEnabledOptions" resultType="cn.org.alan.exam.model.vo.training.CourseVO">
+        SELECT c.id, c.course_code AS courseCode, c.course_name AS courseName,
+               c.course_category AS courseCategory, c.total_hours AS totalHours, c.status
+        FROM t_course c
+        WHERE c.is_deleted = 0 AND c.status = 'ENABLED'
+        ORDER BY c.course_name, c.id
+    </select>
+</mapper>
