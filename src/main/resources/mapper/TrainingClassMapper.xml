@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.alan.exam.mapper.TrainingClassMapper">
+    <sql id="classFields">
+        tc.id,
+        tc.class_code AS classCode,
+        tc.course_id AS courseId,
+        c.course_code AS courseCode,
+        c.course_name AS courseName,
+        c.course_category AS courseCategory,
+        c.course_description AS courseDescription,
+        c.cover_image AS coverImage,
+        c.syllabus,
+        c.total_hours AS totalHours,
+        c.target_audience AS targetAudience,
+        c.prerequisites,
+        c.skill_indicators AS skillIndicators,
+        c.scoring_rules AS scoringRules,
+        tc.class_name AS className,
+        tc.instructor_id AS instructorId,
+        instructor.real_name AS instructorName,
+        tc.enrollment_start AS enrollmentStart,
+        tc.enrollment_end AS enrollmentEnd,
+        tc.start_date AS startDate,
+        tc.end_date AS endDate,
+        tc.location,
+        tc.capacity,
+        tc.fee,
+        tc.class_status AS classStatus,
+        tc.publish_status AS publishStatus,
+        tc.publish_time AS publishTime,
+        (SELECT COUNT(*) FROM t_training_session ts
+         WHERE ts.training_class_id = tc.id AND ts.is_deleted = 0) AS sessionCount,
+        (SELECT COUNT(*) FROM t_training_session ts
+         WHERE ts.training_class_id = tc.id AND ts.is_deleted = 0 AND ts.status &lt;&gt; 'CANCELLED') AS activeSessionCount,
+        tc.create_time AS createTime
+    </sql>
+
+    <select id="selectTrainingClassPage" resultType="cn.org.alan.exam.model.vo.training.TrainingClassVO">
+        SELECT <include refid="classFields"/>
+        FROM t_training_class tc
+        JOIN t_course c ON c.id = tc.course_id AND c.is_deleted = 0
+        JOIN t_user instructor ON instructor.id = tc.instructor_id AND instructor.is_deleted = 0
+        <where>
+            tc.is_deleted = 0
+            <if test="keyword != null and keyword != ''">
+                AND (tc.class_name LIKE CONCAT('%', #{keyword}, '%')
+                     OR tc.class_code LIKE CONCAT('%', #{keyword}, '%')
+                     OR c.course_name LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="classStatus != null and classStatus != ''">
+                AND tc.class_status = #{classStatus}
+            </if>
+            <if test="publishStatus != null and publishStatus != ''">
+                AND tc.publish_status = #{publishStatus}
+            </if>
+            <if test="instructorId != null">
+                AND (tc.instructor_id = #{instructorId}
+                     OR EXISTS (SELECT 1 FROM t_training_session own_session
+                                WHERE own_session.training_class_id = tc.id
+                                  AND own_session.instructor_id = #{instructorId}
+                                  AND own_session.is_deleted = 0))
+            </if>
+            <if test="publishedOnly != null and publishedOnly">
+                AND tc.publish_status = 'PUBLISHED'
+                AND tc.class_status != 'CANCELLED'
+                AND c.status = 'ENABLED'
+            </if>
+        </where>
+        ORDER BY tc.start_date DESC, tc.create_time DESC, tc.id DESC
+    </select>
+
+    <select id="selectTrainingClassVOById" resultType="cn.org.alan.exam.model.vo.training.TrainingClassVO">
+        SELECT <include refid="classFields"/>
+        FROM t_training_class tc
+        JOIN t_course c ON c.id = tc.course_id AND c.is_deleted = 0
+        JOIN t_user instructor ON instructor.id = tc.instructor_id AND instructor.is_deleted = 0
+        WHERE tc.id = #{id} AND tc.is_deleted = 0
+    </select>
+</mapper>

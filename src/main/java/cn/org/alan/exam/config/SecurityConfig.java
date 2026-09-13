@@ -56,6 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         // 用户登录相关的接口，例如登录、注册等接口
                         "/api/auths/**",
+                        // 已发布培训班次的公开浏览接口
+                        "/api/public/**",
                         // Swagger2 相关的资源路径，用于提供 API 文档的访问
                         "/webjars/**",
                         "/swagger-ui.html",

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.alan.exam.mapper.TrainingSessionMapper">
+    <select id="selectByTrainingClassId" resultType="cn.org.alan.exam.model.vo.training.TrainingSessionVO">
+        SELECT ts.id,
+               ts.training_class_id AS trainingClassId,
+               ts.session_no AS sessionNo,
+               ts.topic,
+               ts.content,
+               ts.start_time AS startTime,
+               ts.end_time AS endTime,
+               ts.location,
+               ts.instructor_id AS instructorId,
+               u.real_name AS instructorName,
+               ts.status
+        FROM t_training_session ts
+        JOIN t_user u ON u.id = ts.instructor_id AND u.is_deleted = 0
+        WHERE ts.training_class_id = #{trainingClassId} AND ts.is_deleted = 0
+        ORDER BY ts.session_no, ts.start_time, ts.id
+    </select>
+</mapper>
