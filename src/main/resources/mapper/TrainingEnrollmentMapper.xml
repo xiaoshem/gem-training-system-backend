@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.alan.exam.mapper.TrainingEnrollmentMapper">
+    <sql id="enrollmentFields">
+        e.id,
+        e.enrollment_no AS enrollmentNo,
+        e.training_class_id AS trainingClassId,
+        tc.class_code AS classCode,
+        tc.class_name AS className,
+        c.course_name AS courseName,
+        e.student_id AS studentId,
+        student.user_name AS studentUserName,
+        e.snapshot_real_name AS realName,
+        e.snapshot_id_card AS idCard,
+        e.snapshot_organization AS organization,
+        e.snapshot_position AS position,
+        e.snapshot_phone AS phone,
+        e.status,
+        e.review_reason AS reviewReason,
+        e.reviewed_by AS reviewedBy,
+        reviewer.real_name AS reviewerName,
+        e.reviewed_at AS reviewedAt,
+        tc.start_date AS startDate,
+        tc.end_date AS endDate,
+        tc.location,
+        tc.fee,
+        po.id AS paymentOrderId,
+        po.order_no AS orderNo,
+        po.status AS paymentStatus,
+        po.amount AS paymentAmount,
+        po.transaction_no AS transactionNo,
+        po.paid_at AS paidAt,
+        e.create_time AS createTime
+    </sql>
+
+    <sql id="enrollmentJoins">
+        FROM t_training_enrollment e
+        JOIN t_training_class tc ON tc.id = e.training_class_id AND tc.is_deleted = 0
+        JOIN t_course c ON c.id = tc.course_id AND c.is_deleted = 0
+        JOIN t_user student ON student.id = e.student_id AND student.is_deleted = 0
+        LEFT JOIN t_user reviewer ON reviewer.id = e.reviewed_by AND reviewer.is_deleted = 0
+        LEFT JOIN t_payment_order po ON po.enrollment_id = e.id AND po.is_deleted = 0
+    </sql>
+
+    <select id="selectEnrollmentPage" resultType="cn.org.alan.exam.model.vo.enrollment.EnrollmentVO">
+        SELECT <include refid="enrollmentFields"/>
+        <include refid="enrollmentJoins"/>
+        <where>
+            e.is_deleted = 0
+            <if test="studentId != null">
+                AND e.student_id = #{studentId}
+            </if>
+            <if test="trainingClassId != null">
+                AND e.training_class_id = #{trainingClassId}
+            </if>
+            <if test="status != null and status != ''">
+                AND e.status = #{status}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (e.enrollment_no LIKE CONCAT('%', #{keyword}, '%')
+                     OR tc.class_code LIKE CONCAT('%', #{keyword}, '%')
+                     OR tc.class_name LIKE CONCAT('%', #{keyword}, '%')
+                     OR c.course_name LIKE CONCAT('%', #{keyword}, '%')
+                     OR student.user_name LIKE CONCAT('%', #{keyword}, '%')
+                     OR e.snapshot_real_name LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY e.create_time DESC, e.id DESC
+    </select>
+
+    <select id="selectEnrollmentVOById" resultType="cn.org.alan.exam.model.vo.enrollment.EnrollmentVO">
+        SELECT <include refid="enrollmentFields"/>
+        <include refid="enrollmentJoins"/>
+        WHERE e.id = #{id} AND e.is_deleted = 0
+    </select>
+
+    <select id="selectByIdForUpdate" resultType="cn.org.alan.exam.model.entity.TrainingEnrollment">
+        SELECT * FROM t_training_enrollment WHERE id = #{id} AND is_deleted = 0 FOR UPDATE
+    </select>
+
+    <select id="selectActiveByStudentAndClass" resultType="cn.org.alan.exam.model.entity.TrainingEnrollment">
+        SELECT *
+        FROM t_training_enrollment
+        WHERE student_id = #{studentId}
+          AND training_class_id = #{trainingClassId}
+          AND status IN ('PENDING', 'ADMITTED')
+          AND is_deleted = 0
+        ORDER BY id DESC
+        LIMIT 1
+    </select>
+
+    <select id="countAdmitted" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_training_enrollment
+        WHERE training_class_id = #{trainingClassId}
+          AND status = 'ADMITTED'
+          AND is_deleted = 0
+    </select>
+</mapper>

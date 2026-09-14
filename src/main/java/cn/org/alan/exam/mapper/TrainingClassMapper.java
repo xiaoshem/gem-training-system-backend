@@ -15,4 +15,6 @@ public interface TrainingClassMapper extends BaseMapper<TrainingClass> {
                                                   @Param("publishedOnly") Boolean publishedOnly);
 
     TrainingClassVO selectTrainingClassVOById(@Param("id") Integer id);
+
+    TrainingClass selectByIdForUpdate(@Param("id") Integer id);
 }

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.alan.exam.mapper.PaymentOrderMapper">
+    <select id="selectPaymentOrderPage" resultType="cn.org.alan.exam.model.vo.payment.PaymentOrderVO">
+        SELECT po.id,
+               po.order_no AS orderNo,
+               po.enrollment_id AS enrollmentId,
+               e.enrollment_no AS enrollmentNo,
+               po.training_class_id AS trainingClassId,
+               tc.class_code AS classCode,
+               tc.class_name AS className,
+               c.course_name AS courseName,
+               po.student_id AS studentId,
+               student.user_name AS studentUserName,
+               e.snapshot_real_name AS studentName,
+               po.amount,
+               po.status,
+               po.transaction_no AS transactionNo,
+               po.paid_at AS paidAt,
+               po.create_time AS createTime
+        FROM t_payment_order po
+        JOIN t_training_enrollment e ON e.id = po.enrollment_id AND e.is_deleted = 0
+        JOIN t_training_class tc ON tc.id = po.training_class_id AND tc.is_deleted = 0
+        JOIN t_course c ON c.id = tc.course_id AND c.is_deleted = 0
+        JOIN t_user student ON student.id = po.student_id AND student.is_deleted = 0
+        <where>
+            po.is_deleted = 0
+            <if test="studentId != null">
+                AND po.student_id = #{studentId}
+            </if>
+            <if test="status != null and status != ''">
+                AND po.status = #{status}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (po.order_no LIKE CONCAT('%', #{keyword}, '%')
+                     OR e.enrollment_no LIKE CONCAT('%', #{keyword}, '%')
+                     OR tc.class_code LIKE CONCAT('%', #{keyword}, '%')
+                     OR tc.class_name LIKE CONCAT('%', #{keyword}, '%')
+                     OR c.course_name LIKE CONCAT('%', #{keyword}, '%')
+                     OR student.user_name LIKE CONCAT('%', #{keyword}, '%')
+                     OR e.snapshot_real_name LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY po.create_time DESC, po.id DESC
+    </select>
+
+    <select id="selectByIdForUpdate" resultType="cn.org.alan.exam.model.entity.PaymentOrder">
+        SELECT * FROM t_payment_order WHERE id = #{id} AND is_deleted = 0 FOR UPDATE
+    </select>
+
+    <select id="selectByEnrollmentIdForUpdate" resultType="cn.org.alan.exam.model.entity.PaymentOrder">
+        SELECT * FROM t_payment_order WHERE enrollment_id = #{enrollmentId} AND is_deleted = 0 FOR UPDATE
+    </select>
+</mapper>

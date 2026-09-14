@@ -33,6 +33,10 @@
          WHERE ts.training_class_id = tc.id AND ts.is_deleted = 0) AS sessionCount,
         (SELECT COUNT(*) FROM t_training_session ts
          WHERE ts.training_class_id = tc.id AND ts.is_deleted = 0 AND ts.status &lt;&gt; 'CANCELLED') AS activeSessionCount,
+        (SELECT COUNT(*) FROM t_training_enrollment te
+         WHERE te.training_class_id = tc.id AND te.is_deleted = 0 AND te.status = 'ADMITTED') AS admittedCount,
+        GREATEST(tc.capacity - (SELECT COUNT(*) FROM t_training_enrollment te
+         WHERE te.training_class_id = tc.id AND te.is_deleted = 0 AND te.status = 'ADMITTED'), 0) AS remainingCapacity,
         tc.create_time AS createTime
     </sql>
 
@@ -76,5 +80,9 @@
         JOIN t_course c ON c.id = tc.course_id AND c.is_deleted = 0
         JOIN t_user instructor ON instructor.id = tc.instructor_id AND instructor.is_deleted = 0
         WHERE tc.id = #{id} AND tc.is_deleted = 0
+    </select>
+
+    <select id="selectByIdForUpdate" resultType="cn.org.alan.exam.model.entity.TrainingClass">
+        SELECT * FROM t_training_class WHERE id = #{id} AND is_deleted = 0 FOR UPDATE
     </select>
 </mapper>
