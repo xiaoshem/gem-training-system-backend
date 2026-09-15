@@ -21,6 +21,7 @@ public class PaymentOrderVO {
     private String studentName;
     private BigDecimal amount;
     private String status;
+    private String paymentChannel;
     private String transactionNo;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime paidAt;

@@ -17,7 +17,9 @@ import cn.org.alan.exam.model.enums.TrainingClassStatus;
 import cn.org.alan.exam.model.enums.TrainingPublishStatus;
 import cn.org.alan.exam.model.form.enrollment.EnrollmentApplicationForm;
 import cn.org.alan.exam.model.form.enrollment.EnrollmentReviewForm;
+import cn.org.alan.exam.model.vo.enrollment.EnrollmentVO;
 import cn.org.alan.exam.utils.security.SysUserDetails;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,6 +41,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -163,6 +166,23 @@ public class EnrollmentServiceImplTest {
             assertEquals("拒绝报名时必须填写原因", exception.getMessage());
         }
         verify(enrollmentMapper, never()).updateById(any(TrainingEnrollment.class));
+    }
+
+    @Test
+    public void manageShowsFullPhoneButKeepsIdCardMasked() {
+        authenticate(3, "role_admin");
+        EnrollmentVO enrollment = new EnrollmentVO();
+        enrollment.setPhone("13312349331");
+        enrollment.setIdCard("450102200001010011");
+        Page<EnrollmentVO> page = new Page<>(1, 10);
+        page.setRecords(Collections.singletonList(enrollment));
+        when(enrollmentMapper.selectEnrollmentPage(any(Page.class), isNull(), isNull(), isNull(), isNull()))
+                .thenReturn(page);
+
+        service.manage(1, 10, null, null, null);
+
+        assertEquals("13312349331", page.getRecords().get(0).getPhone());
+        assertEquals("450102********0011", page.getRecords().get(0).getIdCard());
     }
 
     private TrainingClass enrollingClass(Integer id, Integer capacity) {

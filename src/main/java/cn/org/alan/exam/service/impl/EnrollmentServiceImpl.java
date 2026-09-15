@@ -92,7 +92,7 @@ public class EnrollmentServiceImpl extends ServiceImpl<TrainingEnrollmentMapper,
     public Result<IPage<EnrollmentVO>> mine(Integer pageNum, Integer pageSize, String keyword, String status) {
         Page<EnrollmentVO> page = enrollmentMapper.selectEnrollmentPage(
                 new Page<>(pageNum, pageSize), SecurityUtil.getUserId(), keyword, status, null);
-        maskPrivateData(page);
+        maskPrivateData(page, true);
         return Result.success("查询成功", page);
     }
 
@@ -104,7 +104,7 @@ public class EnrollmentServiceImpl extends ServiceImpl<TrainingEnrollmentMapper,
             return Result.success("暂无有效报名", null);
         }
         EnrollmentVO vo = enrollmentMapper.selectEnrollmentVOById(enrollment.getId());
-        maskPrivateData(vo);
+        maskPrivateData(vo, true);
         return Result.success("查询成功", vo);
     }
 
@@ -113,7 +113,7 @@ public class EnrollmentServiceImpl extends ServiceImpl<TrainingEnrollmentMapper,
                                                String status, Integer trainingClassId) {
         Page<EnrollmentVO> page = enrollmentMapper.selectEnrollmentPage(
                 new Page<>(pageNum, pageSize), null, keyword, status, trainingClassId);
-        maskPrivateData(page);
+        maskPrivateData(page, false);
         return Result.success("查询成功", page);
     }
 
@@ -165,7 +165,7 @@ public class EnrollmentServiceImpl extends ServiceImpl<TrainingEnrollmentMapper,
         addAudit(enrollment.getId(), "ADMIT", EnrollmentStatus.PENDING.name(),
                 EnrollmentStatus.ADMITTED.name(), enrollment.getReviewReason(), operatorId, now);
         addMessage(enrollment.getStudentId(), "培训报名审核通过",
-                "你报名的“" + trainingClass.getClassName() + "”已录取，请在我的报名中完成模拟缴费。",
+                "你报名的“" + trainingClass.getClassName() + "”已录取，请前往“我的缴费”完成缴费。",
                 enrollment.getId(), operatorId, now);
         return Result.success("录取成功，已生成缴费订单");
     }
@@ -299,18 +299,20 @@ public class EnrollmentServiceImpl extends ServiceImpl<TrainingEnrollmentMapper,
         userMessageMapper.insert(message);
     }
 
-    private void maskPrivateData(Page<EnrollmentVO> page) {
+    private void maskPrivateData(Page<EnrollmentVO> page, boolean hidePhone) {
         if (page != null && page.getRecords() != null) {
-            page.getRecords().forEach(this::maskPrivateData);
+            page.getRecords().forEach(item -> maskPrivateData(item, hidePhone));
         }
     }
 
-    private void maskPrivateData(EnrollmentVO vo) {
+    private void maskPrivateData(EnrollmentVO vo, boolean hidePhone) {
         if (vo == null) {
             return;
         }
         vo.setIdCard(maskIdCard(vo.getIdCard()));
-        vo.setPhone(maskPhone(vo.getPhone()));
+        if (hidePhone) {
+            vo.setPhone(maskPhone(vo.getPhone()));
+        }
         vo.setTransactionNo(maskTransaction(vo.getTransactionNo()));
     }
 

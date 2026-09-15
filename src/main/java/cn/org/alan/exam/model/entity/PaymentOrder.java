@@ -24,6 +24,7 @@ public class PaymentOrder implements Serializable {
     private Integer trainingClassId;
     private BigDecimal amount;
     private String status;
+    private String paymentChannel;
     private String transactionNo;
     private LocalDateTime paidAt;
     @Version

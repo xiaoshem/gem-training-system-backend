@@ -4,9 +4,11 @@ import cn.org.alan.exam.common.exception.ServiceRuntimeException;
 import cn.org.alan.exam.utils.security.SysUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Security工具类
@@ -24,8 +26,7 @@ public class SecurityUtil {
      * @return 用户id
      */
     public static Integer getUserId() {
-        SysUserDetails user = (SysUserDetails) (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        return user.getUser().getId();
+        return getCurrentUser().getUser().getId();
     }
 
     /**
@@ -34,8 +35,7 @@ public class SecurityUtil {
      * @return 角色
      */
     public static String getRole() {
-        List<? extends GrantedAuthority> list = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().collect(java.util.stream.Collectors.toList());
-        return list.get(0).toString();
+        return getAuthorities().get(0).getAuthority();
     }
 
     /**
@@ -44,8 +44,7 @@ public class SecurityUtil {
      * @return 角色
      */
     public static Integer getRoleCode() {
-        List<? extends GrantedAuthority> list = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().collect(java.util.stream.Collectors.toList());
-        String roleName = list.get(0).toString();
+        String roleName = getRole();
         Integer roleCode;
         if ("role_admin".equals(roleName)) {
             roleCode = 3;
@@ -67,9 +66,33 @@ public class SecurityUtil {
      * @return
      */
     public static Integer getGradeId() {
-        SysUserDetails user = (SysUserDetails) (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        return user.getUser().getGradeId();
+        return getCurrentUser().getUser().getGradeId();
     }
 
+    private static SysUserDetails getCurrentUser() {
+        Object principal = getAuthentication().getPrincipal();
+        if (!(principal instanceof SysUserDetails)) {
+            throw new ServiceRuntimeException("登录已过期，请重新登录");
+        }
+        return (SysUserDetails) principal;
+    }
+
+    private static List<? extends GrantedAuthority> getAuthorities() {
+        List<? extends GrantedAuthority> authorities = getAuthentication().getAuthorities()
+                .stream()
+                .collect(Collectors.toList());
+        if (authorities.isEmpty()) {
+            throw new ServiceRuntimeException("登录已过期，请重新登录");
+        }
+        return authorities;
+    }
+
+    private static Authentication getAuthentication() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ServiceRuntimeException("登录已过期，请重新登录");
+        }
+        return authentication;
+    }
 
 }

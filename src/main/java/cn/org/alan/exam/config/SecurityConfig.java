@@ -54,10 +54,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // 定义一系列允许匿名访问（即无需身份验证即可访问）的请求路径
                 .antMatchers(
-                        // 用户登录相关的接口，例如登录、注册等接口
-                        "/api/auths/**",
+                        // 仅登录前需要使用的认证接口允许匿名访问。
+                        // 注销和在线心跳必须携带有效登录令牌，避免匿名身份进入业务层。
+                        "/api/auths/login",
+                        "/api/auths/register",
+                        "/api/auths/captcha",
+                        "/api/auths/verifyCode/**",
                         // 已发布培训班次的公开浏览接口
                         "/api/public/**",
+                        // 支付宝服务器通知与浏览器同步返回不携带本站登录令牌
+                        "/api/payment-orders/alipay/notify",
+                        "/api/payment-orders/alipay/return",
                         // Swagger2 相关的资源路径，用于提供 API 文档的访问
                         "/webjars/**",
                         "/swagger-ui.html",

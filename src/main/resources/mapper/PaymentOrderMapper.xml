@@ -15,6 +15,7 @@
                e.snapshot_real_name AS studentName,
                po.amount,
                po.status,
+               po.payment_channel AS paymentChannel,
                po.transaction_no AS transactionNo,
                po.paid_at AS paidAt,
                po.create_time AS createTime
@@ -50,5 +51,13 @@
 
     <select id="selectByEnrollmentIdForUpdate" resultType="cn.org.alan.exam.model.entity.PaymentOrder">
         SELECT * FROM t_payment_order WHERE enrollment_id = #{enrollmentId} AND is_deleted = 0 FOR UPDATE
+    </select>
+
+    <select id="selectByOrderNo" resultType="cn.org.alan.exam.model.entity.PaymentOrder">
+        SELECT * FROM t_payment_order WHERE order_no = #{orderNo} AND is_deleted = 0
+    </select>
+
+    <select id="selectByOrderNoForUpdate" resultType="cn.org.alan.exam.model.entity.PaymentOrder">
+        SELECT * FROM t_payment_order WHERE order_no = #{orderNo} AND is_deleted = 0 FOR UPDATE
     </select>
 </mapper>

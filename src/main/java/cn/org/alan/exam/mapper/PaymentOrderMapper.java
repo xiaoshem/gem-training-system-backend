@@ -15,4 +15,8 @@ public interface PaymentOrderMapper extends BaseMapper<PaymentOrder> {
     PaymentOrder selectByIdForUpdate(@Param("id") Integer id);
 
     PaymentOrder selectByEnrollmentIdForUpdate(@Param("enrollmentId") Integer enrollmentId);
+
+    PaymentOrder selectByOrderNo(@Param("orderNo") String orderNo);
+
+    PaymentOrder selectByOrderNoForUpdate(@Param("orderNo") String orderNo);
 }
