@@ -121,3 +121,20 @@ online-exam:
 system:
   register:
     enabled: true  # 控制是否开放注册功能
+
+# 培训缴费：本地模拟默认保留；支付宝密钥只能通过环境变量提供。
+payment:
+  local-simulation-enabled: ${PAYMENT_LOCAL_SIMULATION_ENABLED:true}
+  alipay-sandbox:
+    enabled: ${ALIPAY_SANDBOX_ENABLED:false}
+    # 请从当前支付宝沙箱控制台复制网关地址，避免平台升级后使用过期地址。
+    gateway-url: ${ALIPAY_GATEWAY_URL:}
+    app-id: ${ALIPAY_APP_ID:}
+    private-key: ${ALIPAY_PRIVATE_KEY:}
+    alipay-public-key: ${ALIPAY_PUBLIC_KEY:}
+    seller-id: ${ALIPAY_SELLER_ID:}
+    notify-url: ${ALIPAY_NOTIFY_URL:}
+    return-url: ${ALIPAY_RETURN_URL:http://localhost:8080/api/payment-orders/alipay/return}
+    frontend-return-url: ${ALIPAY_FRONTEND_RETURN_URL:http://localhost:9527/#/my-payments}
+    charset: UTF-8
+    sign-type: RSA2

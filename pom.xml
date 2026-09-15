@@ -38,6 +38,7 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <minio.version>7.0.1</minio.version>
+        <alipay-sdk.version>4.40.994.ALL</alipay-sdk.version>
     </properties>
 
     <!-- 项目依赖配置 -->
@@ -249,6 +250,12 @@
             <groupId>org.apache.santuario</groupId>
             <artifactId>xmlsec</artifactId>
             <version>2.3.0</version>
+        </dependency>
+        <!-- 支付宝开放平台 Java SDK，用于沙箱下单、验签和支付结果查询 -->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>${alipay-sdk.version}</version>
         </dependency>
 
         <!--&lt;!&ndash; 或者使用 JDK 相关的 XML DSig &ndash;&gt;-->

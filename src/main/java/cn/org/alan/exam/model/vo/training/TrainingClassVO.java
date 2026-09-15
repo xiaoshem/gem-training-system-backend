@@ -43,6 +43,8 @@ public class TrainingClassVO {
     private LocalDateTime publishTime;
     private Integer sessionCount;
     private Integer activeSessionCount;
+    private Integer admittedCount;
+    private Integer remainingCapacity;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 }
